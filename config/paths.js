@@ -49,7 +49,7 @@ const moduleFileExtensions = [
   'tsx',
   'json',
   'web.jsx',
-  'jsx',
+  'jsx'
 ];
 
 // Resolve file paths in the same order as webpack
@@ -80,11 +80,10 @@ module.exports = {
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
   proxySetup: resolveApp('src/setupProxy.js'),
+  sassResource: resolveApp('src/styles/index.scss'),
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
-  servedPath: getServedPath(resolveApp('package.json')),
+  servedPath: getServedPath(resolveApp('package.json'))
 };
-
-
 
 module.exports.moduleFileExtensions = moduleFileExtensions;

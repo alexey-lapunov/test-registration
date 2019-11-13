@@ -1,8 +1,10 @@
 import React from 'react';
 
+import styles from './App.module.scss';
+
 function App() {
   return (
-    <div className="App">
+    <div>
       <h1>Test registration</h1>
     </div>
   );
