@@ -1,8 +1,15 @@
 import React from 'react';
 
+import Input from './../../components/Input';
+
 class LoginPage extends React.PureComponent {
   render() {
-    return <span>Login page</span>;
+    return (
+      <div>
+        <Input />
+        <Input />
+      </div>
+    );
   }
 }
 
