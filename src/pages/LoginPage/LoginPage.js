@@ -1,13 +1,13 @@
 import React from 'react';
 
-import Input from './../../components/Input';
+import MySelect from 'components/MySelect';
 
+import styles from './LoginPage.module.scss';
 class LoginPage extends React.PureComponent {
   render() {
     return (
-      <div>
-        <Input />
-        <Input />
+      <div className={styles.page}>
+        <MySelect />
       </div>
     );
   }
