@@ -1,14 +1,13 @@
 import React from 'react';
 
-import LoginPage from 'pages/LoginPage/';
+import { Home } from 'pages/Home/';
 
 import styles from './App.module.scss';
 
 function App() {
   return (
     <div className={styles.app}>
-      <h1>Test registration</h1>
-      <LoginPage />
+      <Home />
     </div>
   );
 }
