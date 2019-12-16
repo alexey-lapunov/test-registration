@@ -1,0 +1,47 @@
+.container {
+  max-width: 570px;
+  width: 100%;
+
+  padding: 35px;
+  box-sizing: border-box;
+  
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 30px 60px 0 rgba(90, 116, 148, 0.4);
+}
+
+.row {
+  display: flex;
+  margin: 0 -10px 20px 0;
+}
+
+.cell {
+  width: 100%;
+
+  padding: 0 10px 0 0;
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+
+  width: 100%;
+  margin: 0 -10px 0 0;
+  padding: 0 10px 0 0;
+
+  &-label {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    color: #1a3b5d;
+  }
+
+  &-item {
+    flex: 1;
+    padding: 0 10px 0 0;
+  }
+}
