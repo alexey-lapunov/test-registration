@@ -7,7 +7,8 @@ export const initialState = {
   expirationDate: {
     month: '',
     year: ''
-  }
+  },
+  cardRotate: false
 };
 
 export function reducer(state, action) {
@@ -42,6 +43,11 @@ export function reducer(state, action) {
           ...state.expirationDate,
           year: action.payload
         }
+      };
+    case A.SET_CARD_ROTATE:
+      return {
+        ...state,
+        cardRotate: action.payload
       };
     default:
       return state;

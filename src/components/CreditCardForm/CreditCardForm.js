@@ -1,9 +1,11 @@
 import React, { useReducer } from 'react';
-import { reducer, initialState, setCardNumber } from './hooks';
+import { reducer, initialState, setCardNumber, setCardRotate } from './hooks';
+import classnames from 'classnames';
 
-import InputMask from 'react-input-mask';
 import { Input } from 'components/Input';
 import { Select } from 'components/Select';
+
+import mrImg from './../../static/img/mr.jpg';
 
 import styles from './CreditCardForm.module.scss';
 
@@ -120,6 +122,39 @@ const CreditCardForm = () => {
 
   return (
     <div className={styles.container}>
+      <div
+        className={classnames(styles.card, {
+          [styles.rotate]: state.cardRotate
+        })}
+      >
+        <div className={styles.cardContent}>
+          <div
+            className={styles.cardFront}
+            style={{ backgroundImage: `url(${mrImg})` }}
+          >
+            <div className={styles.cardNumber}>
+              {Array.from(Array(16)).map((item, i) => {
+                const cardNumber = state.cardNumber.replace(/\s/g, '');
+                const translateY = (+cardNumber[i] + 1) * 100 || 0;
+                return (
+                  <div
+                    key={i}
+                    className={styles.cardNumberFigure}
+                    style={{
+                      transform: `translateY(-${translateY}%)`
+                    }}
+                  >
+                    {Array.from(Array(11)).map((item, i) => (
+                      <i key={i}>{i - 1 === -1 ? 'X' : i - 1}</i>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className={styles.cardBack}></div>
+        </div>
+      </div>
       <div className={styles.row}>
         <div className={styles.cell}>
           <Input
@@ -146,7 +181,12 @@ const CreditCardForm = () => {
           </div>
         </div>
         <div className={styles.cell}>
-          <Input type="text" labelText="CVV" />
+          <Input
+            type="text"
+            labelText="CVV"
+            onFocus={() => dispatch(setCardRotate(true))}
+            onBlur={() => dispatch(setCardRotate(false))}
+          />
         </div>
       </div>
     </div>
