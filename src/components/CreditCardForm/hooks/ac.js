@@ -5,6 +5,11 @@ export const setCardNumber = value => ({
   payload: value
 });
 
+export const setCardHolder = value => ({
+  type: A.SET_CARD_HOLDER,
+  payload: value
+});
+
 export const setCardRotate = value => ({
   type: A.SET_CARD_ROTATE,
   payload: value

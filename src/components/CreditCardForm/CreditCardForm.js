@@ -1,6 +1,14 @@
 import React, { useReducer } from 'react';
-import { reducer, initialState, setCardNumber, setCardRotate } from './hooks';
 import classnames from 'classnames';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
+import {
+  reducer,
+  initialState,
+  setCardNumber,
+  setCardRotate,
+  setCardHolder
+} from './hooks';
 
 import { Input } from 'components/Input';
 import { Select } from 'components/Select';
@@ -8,6 +16,7 @@ import { Select } from 'components/Select';
 import mrImg from './../../static/img/mr.jpg';
 
 import styles from './CreditCardForm.module.scss';
+import chartTranstion from './transitions/chart.module.scss';
 
 const yaerOptions = [
   {
@@ -114,10 +123,16 @@ const monthOptions = [
 const CreditCardForm = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const inputYearOnKeyUp = e => {
+  const inputCardNumberOnChange = e => {
     const target = e.target;
 
     dispatch(setCardNumber(target.value));
+  };
+
+  const inputCardHolderOnChange = e => {
+    const target = e.target;
+
+    dispatch(setCardHolder(target.value.toUpperCase()));
   };
 
   return (
@@ -151,6 +166,20 @@ const CreditCardForm = () => {
                 );
               })}
             </div>
+            <div className={styles.cardHolder}>
+              <span className={styles.cardHolderLabel}>Card Holder</span>
+              <TransitionGroup className={styles.cardHolderValue}>
+                {Array.from(state.cardHolder).map((chart, i) => (
+                  <CSSTransition
+                    key={i}
+                    timeout={500}
+                    classNames={chartTranstion}
+                  >
+                    <span className={styles.cardHolderChart}>{chart}</span>
+                  </CSSTransition>
+                ))}
+              </TransitionGroup>
+            </div>
           </div>
           <div className={styles.cardBack}></div>
         </div>
@@ -158,16 +187,21 @@ const CreditCardForm = () => {
       <div className={styles.row}>
         <div className={styles.cell}>
           <Input
-            labelText="Crad Number"
+            labelText="Card Number"
             value={state.cardNumber}
             mask="9999 9999 9999 9999"
-            onChange={inputYearOnKeyUp}
+            onChange={inputCardNumberOnChange}
           />
         </div>
       </div>
       <div className={styles.row}>
         <div className={styles.cell}>
-          <Input mask={/^[A-Za-z]+$/} labelText="Crad Holders" />
+          <Input
+            labelText="Card Holder"
+            value={state.cardHolder}
+            //mask={/[0-9]/}
+            onChange={inputCardHolderOnChange}
+          />
         </div>
       </div>
       <div className={styles.row}>

@@ -1,4 +1,4 @@
 import { reducer, initialState } from './reducer';
-import { setCardNumber, setCardRotate } from './ac';
+import { setCardNumber, setCardRotate, setCardHolder } from './ac';
 
-export { reducer, initialState, setCardNumber, setCardRotate };
+export { reducer, initialState, setCardNumber, setCardRotate, setCardHolder };
