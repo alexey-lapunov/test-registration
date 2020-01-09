@@ -5,6 +5,7 @@ import styles from './Input.module.scss';
 
 const Input = props => {
   const { mask, value, onChange, labelText, onFocus, onBlur } = props;
+
   return (
     <div className={styles.box}>
       <label>

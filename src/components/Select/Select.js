@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 
 import styles from './Select.module.scss';
 
-const Select = ({ options, defaultValue }) => {
+const Select = ({ options, labelText, onChange }) => {
   return (
-    <select className={styles.select}>
-      <option defaultValue={defaultValue}>{defaultValue}</option>
+    <select className={styles.select} onChange={onChange}>
+      <option defaultValue={labelText} disabled selected>
+        {labelText}
+      </option>
       {options.map(option => (
         <option key={option.value} value={option.value}>
           {option.text}

@@ -1,13 +1,19 @@
 import React, { useReducer } from 'react';
 import classnames from 'classnames';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import {
+  CSSTransition,
+  TransitionGroup,
+  SwitchTransition
+} from 'react-transition-group';
 
 import {
   reducer,
   initialState,
   setCardNumber,
   setCardRotate,
-  setCardHolder
+  setCardHolder,
+  setCardDateMonth,
+  setCardDateYear
 } from './hooks';
 
 import { Input } from 'components/Input';
@@ -17,6 +23,7 @@ import mrImg from './../../static/img/mr.jpg';
 
 import styles from './CreditCardForm.module.scss';
 import chartTranstion from './transitions/chart.module.scss';
+import dateTranstion from './transitions/date.module.scss';
 
 const yaerOptions = [
   {
@@ -135,6 +142,18 @@ const CreditCardForm = () => {
     dispatch(setCardHolder(target.value.toUpperCase()));
   };
 
+  const selectMonthOnChange = e => {
+    const target = e.target;
+
+    dispatch(setCardDateMonth(target.value));
+  };
+
+  const selectYearOnChange = e => {
+    const target = e.target;
+
+    dispatch(setCardDateYear(target.value));
+  };
+
   return (
     <div className={styles.container}>
       <div
@@ -166,19 +185,43 @@ const CreditCardForm = () => {
                 );
               })}
             </div>
-            <div className={styles.cardHolder}>
-              <span className={styles.cardHolderLabel}>Card Holder</span>
-              <TransitionGroup className={styles.cardHolderValue}>
-                {Array.from(state.cardHolder).map((chart, i) => (
+            <div className={styles.cardFooter}>
+              <div className={styles.cardHolder}>
+                <span className={styles.cardHolderLabel}>Card Holder</span>
+                <TransitionGroup className={styles.cardHolderValue}>
+                  {Array.from(state.cardHolder).map((chart, i) => (
+                    <CSSTransition
+                      key={i}
+                      timeout={500}
+                      classNames={chartTranstion}
+                    >
+                      <span className={styles.cardHolderChart}>{chart}</span>
+                    </CSSTransition>
+                  ))}
+                </TransitionGroup>
+              </div>
+              <div className={styles.cardDate}>
+                <span className={styles.cardDateLabel}>Expires</span>
+                <span className={styles.cardDateMonth}>
+                  {state.expirationDate.month}
+                </span>
+                {' / '}
+                <SwitchTransition mode="out-in">
                   <CSSTransition
-                    key={i}
+                    appear
                     timeout={500}
-                    classNames={chartTranstion}
+                    classNames={dateTranstion}
+                    key={state.expirationDate.year}
+                    addEndListener={(node, done) => {
+                      node.addEventListener('transitionend', done, false);
+                    }}
                   >
-                    <span className={styles.cardHolderChart}>{chart}</span>
+                    <span className={styles.cardDateYear}>
+                      {state.expirationDate.year.slice(-2)}
+                    </span>
                   </CSSTransition>
-                ))}
-              </TransitionGroup>
+                </SwitchTransition>
+              </div>
             </div>
           </div>
           <div className={styles.cardBack}></div>
@@ -199,7 +242,6 @@ const CreditCardForm = () => {
           <Input
             labelText="Card Holder"
             value={state.cardHolder}
-            //mask={/[0-9]/}
             onChange={inputCardHolderOnChange}
           />
         </div>
@@ -208,13 +250,21 @@ const CreditCardForm = () => {
         <div className={styles.group}>
           <span className={styles.groupLabel}>Expiration Date</span>
           <div className={styles.groupItem}>
-            <Select defaultValue="Year" options={yaerOptions} />
+            <Select
+              labelText="Year"
+              options={yaerOptions}
+              onChange={selectYearOnChange}
+            />
           </div>
           <div className={styles.groupItem}>
-            <Select defaultValue="Month" options={monthOptions} />
+            <Select
+              labelText="Month"
+              options={monthOptions}
+              onChange={selectMonthOnChange}
+            />
           </div>
         </div>
-        <div className={styles.cell}>
+        <div className={classnames(styles.cell, styles.ccv)}>
           <Input
             type="text"
             labelText="CVV"

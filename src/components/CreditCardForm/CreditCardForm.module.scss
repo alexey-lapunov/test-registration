@@ -94,10 +94,23 @@
     }
   }
 
-  &-holder {
+  &-footer {
     position: absolute;
     bottom: 30px;
-    left: 30px;
+    left: 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    width: 100%;
+
+    padding: 0 30px;
+    box-sizing: border-box;
+  }
+
+  &-holder {
+    width: calc(100% - 85px);
 
     &-label {
       font-size: 14px;
@@ -118,6 +131,28 @@
       min-width: 8px;
     }
   }
+
+  &-date {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    color: white;
+
+    &-label {
+      width: 100%;
+
+      font-size: 14px;
+      text-align: center;;
+
+      color: rgba(white, .9);
+    }
+
+    &-month,
+    &-year {
+      width: 18px;
+    }
+  }
 }
 
 .row {
@@ -129,13 +164,17 @@
   width: 100%;
 
   padding: 0 10px 0 0;
+
+  &.ccv {
+    width: 30%;
+  }
 }
 
 .group {
   display: flex;
   flex-wrap: wrap;
 
-  width: 100%;
+  width: 70%;
   margin: 0 -10px 0 0;
   padding: 0 10px 0 0;
 

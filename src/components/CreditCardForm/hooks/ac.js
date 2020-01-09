@@ -14,3 +14,13 @@ export const setCardRotate = value => ({
   type: A.SET_CARD_ROTATE,
   payload: value
 });
+
+export const setCardDateMonth = value => ({
+  type: A.SET_EXPIRATION_DATE_MONTH,
+  payload: value
+});
+
+export const setCardDateYear = value => ({
+  type: A.SET_EXPIRATION_DATE_YEAR,
+  payload: value
+});
