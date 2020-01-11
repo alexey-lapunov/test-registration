@@ -13,119 +13,53 @@ import {
   setCardRotate,
   setCardHolder,
   setCardDateMonth,
-  setCardDateYear
+  setCardDateYear,
+  setCardCvv,
+  setCardType
 } from './hooks';
+
+import { regexp } from 'utils/regexp';
 
 import { Input } from 'components/Input';
 import { Select } from 'components/Select';
 
-import mrImg from './../../static/img/mr.jpg';
+import mrImg from 'static/img/mr.jpg';
+import visaIcon from 'static/icons/visa.png';
+import troyIcon from 'static/icons/troy.png';
+import amexIcon from 'static/icons/amex.png';
+import discoverIcon from 'static/icons/discover.png';
+import mastercardIcon from 'static/icons/mastercard.png';
 
 import styles from './CreditCardForm.module.scss';
 import chartTranstion from './transitions/chart.module.scss';
 import dateTranstion from './transitions/date.module.scss';
 
-const yaerOptions = [
-  {
-    value: '2019',
-    text: '2019'
-  },
-  {
-    value: '2020',
-    text: '2020'
-  },
-  {
-    value: '2021',
-    text: '2021'
-  },
-  {
-    value: '2022',
-    text: '2022'
-  },
-  {
-    value: '2023',
-    text: '2023'
-  },
-  {
-    value: '2024',
-    text: '2024'
-  },
-  {
-    value: '2025',
-    text: '2025'
-  },
-  {
-    value: '2026',
-    text: '2026'
-  },
-  {
-    value: '2027',
-    text: '2027'
-  },
-  {
-    value: '2028',
-    text: '2028'
-  },
-  {
-    value: '2029',
-    text: '2029'
-  },
-  {
-    value: '2030',
-    text: '2030'
-  }
-];
+const cardTypeIcons = {
+  visa: visaIcon,
+  amex: amexIcon,
+  troy: troyIcon,
+  discover: discoverIcon,
+  mastercard: mastercardIcon
+};
 
-const monthOptions = [
-  {
-    value: '01',
-    text: '01'
-  },
-  {
-    value: '02',
-    text: '02'
-  },
-  {
-    value: '03',
-    text: '03'
-  },
-  {
-    value: '04',
-    text: '04'
-  },
-  {
-    value: '05',
-    text: '05'
-  },
-  {
-    value: '06',
-    text: '06'
-  },
-  {
-    value: '07',
-    text: '07'
-  },
-  {
-    value: '08',
-    text: '08'
-  },
-  {
-    value: '09',
-    text: '09'
-  },
-  {
-    value: '10',
-    text: '10'
-  },
-  {
-    value: '11',
-    text: '11'
-  },
-  {
-    value: '12',
-    text: '12'
-  }
-];
+const yaerOptions = Array.from(Array(11)).map((item, i) => {
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const value = currentYear + i;
+
+  return {
+    value,
+    text: value
+  };
+});
+
+const monthOptions = Array.from(Array(12)).map((item, i) => {
+  const value = `${i + 1}`.length === 1 ? `0${i + 1}` : `${i + 1}`;
+  return {
+    value,
+    text: value
+  };
+});
 
 const CreditCardForm = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -133,13 +67,14 @@ const CreditCardForm = () => {
   const inputCardNumberOnChange = e => {
     const target = e.target;
 
+    getCardType(target.value);
     dispatch(setCardNumber(target.value));
   };
 
   const inputCardHolderOnChange = e => {
     const target = e.target;
 
-    dispatch(setCardHolder(target.value.toUpperCase()));
+    dispatch(setCardHolder(target.value));
   };
 
   const selectMonthOnChange = e => {
@@ -154,6 +89,23 @@ const CreditCardForm = () => {
     dispatch(setCardDateYear(target.value));
   };
 
+  const inputCardCvv = e => {
+    const target = e.target;
+
+    dispatch(setCardCvv(target.value));
+  };
+
+  const getCardType = number => {
+    if (number.match(regexp.regExpVisa)) return dispatch(setCardType('visa'));
+    if (number.match(regexp.regExpAmex)) return dispatch(setCardType('amex'));
+    if (number.match(regexp.regExpTroy)) return dispatch(setCardType('troy'));
+    if (number.match(regexp.regExpDiscover))
+      return dispatch(setCardType('discover'));
+    if (number.match(regexp.regExpMasterCard))
+      return dispatch(setCardType('mastercard'));
+    return dispatch(setCardType('visa'));
+  };
+
   return (
     <div className={styles.container}>
       <div
@@ -166,6 +118,25 @@ const CreditCardForm = () => {
             className={styles.cardFront}
             style={{ backgroundImage: `url(${mrImg})` }}
           >
+            <div className={styles.cardType}>
+              <SwitchTransition mode="out-in">
+                <CSSTransition
+                  appear
+                  timeout={500}
+                  classNames={dateTranstion}
+                  key={state.cardType}
+                  addEndListener={(node, done) => {
+                    node.addEventListener('transitionend', done, false);
+                  }}
+                >
+                  <img
+                    alt=""
+                    className={styles.cardTypeIcon}
+                    src={cardTypeIcons[state.cardType]}
+                  />
+                </CSSTransition>
+              </SwitchTransition>
+            </div>
             <div className={styles.cardNumber}>
               {Array.from(Array(16)).map((item, i) => {
                 const cardNumber = state.cardNumber.replace(/\s/g, '');
@@ -202,10 +173,22 @@ const CreditCardForm = () => {
               </div>
               <div className={styles.cardDate}>
                 <span className={styles.cardDateLabel}>Expires</span>
-                <span className={styles.cardDateMonth}>
-                  {state.expirationDate.month}
-                </span>
-                {' / '}
+                <SwitchTransition mode="out-in">
+                  <CSSTransition
+                    appear
+                    timeout={500}
+                    classNames={dateTranstion}
+                    key={state.expirationDate.month}
+                    addEndListener={(node, done) => {
+                      node.addEventListener('transitionend', done, false);
+                    }}
+                  >
+                    <span className={styles.cardDateMonth}>
+                      {state.expirationDate.month}
+                    </span>
+                  </CSSTransition>
+                </SwitchTransition>
+                {'/'}
                 <SwitchTransition mode="out-in">
                   <CSSTransition
                     appear
@@ -224,7 +207,25 @@ const CreditCardForm = () => {
               </div>
             </div>
           </div>
-          <div className={styles.cardBack}></div>
+          <div
+            className={styles.cardBack}
+            style={{
+              backgroundImage: `url(https://images7.alphacoders.com/801/801755.jpg)`
+            }}
+          >
+            <div className={styles.cardBand}></div>
+            <div className={styles.cardCvv}>
+              <span className={styles.cardCvvTitle}>CVV</span>
+              <div className={styles.cardCvvBand}>{state.cardCvv}</div>
+              <div className={styles.cardCvvType}>
+                <img
+                  alt=""
+                  className={styles.cardCvvTypeIcon}
+                  src={cardTypeIcons[state.cardType]}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className={styles.row}>
@@ -251,23 +252,24 @@ const CreditCardForm = () => {
           <span className={styles.groupLabel}>Expiration Date</span>
           <div className={styles.groupItem}>
             <Select
-              labelText="Year"
-              options={yaerOptions}
-              onChange={selectYearOnChange}
-            />
-          </div>
-          <div className={styles.groupItem}>
-            <Select
               labelText="Month"
               options={monthOptions}
               onChange={selectMonthOnChange}
             />
           </div>
+          <div className={styles.groupItem}>
+            <Select
+              labelText="Year"
+              options={yaerOptions}
+              onChange={selectYearOnChange}
+            />
+          </div>
         </div>
         <div className={classnames(styles.cell, styles.ccv)}>
           <Input
-            type="text"
+            mask="999"
             labelText="CVV"
+            onChange={inputCardCvv}
             onFocus={() => dispatch(setCardRotate(true))}
             onBlur={() => dispatch(setCardRotate(false))}
           />

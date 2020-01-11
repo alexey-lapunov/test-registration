@@ -4,9 +4,10 @@ export const initialState = {
   cardNumber: '',
   cardHolder: '',
   cardCvv: '',
+  cardType: 'visa',
   expirationDate: {
-    month: '',
-    year: ''
+    month: 'MM',
+    year: 'YY'
   },
   cardRotate: false
 };
@@ -43,6 +44,11 @@ export function reducer(state, action) {
           ...state.expirationDate,
           year: action.payload
         }
+      };
+    case A.SET_CARD_TYPE:
+      return {
+        ...state,
+        cardType: action.payload
       };
     case A.SET_CARD_ROTATE:
       return {

@@ -5,10 +5,12 @@ import styles from './Select.module.scss';
 
 const Select = ({ options, labelText, onChange }) => {
   return (
-    <select className={styles.select} onChange={onChange}>
-      <option defaultValue={labelText} disabled selected>
-        {labelText}
-      </option>
+    <select
+      className={styles.select}
+      onChange={onChange}
+      defaultValue={labelText}
+    >
+      <option disabled>{labelText}</option>
       {options.map(option => (
         <option key={option.value} value={option.value}>
           {option.text}

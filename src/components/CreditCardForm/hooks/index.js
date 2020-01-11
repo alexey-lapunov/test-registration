@@ -4,7 +4,9 @@ import {
   setCardRotate,
   setCardHolder,
   setCardDateMonth,
-  setCardDateYear
+  setCardDateYear,
+  setCardCvv,
+  setCardType
 } from './ac';
 
 export {
@@ -14,5 +16,7 @@ export {
   setCardRotate,
   setCardHolder,
   setCardDateMonth,
-  setCardDateYear
+  setCardDateYear,
+  setCardCvv,
+  setCardType
 };
