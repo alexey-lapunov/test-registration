@@ -1,7 +1,7 @@
-export const regexp = {
-  regExpVisa: new RegExp('^4'),
-  regExpTroy: new RegExp('^9792'),
-  regExpAmex: new RegExp('^(34|37)'),
-  regExpDiscover: new RegExp('^6011'),
-  regExpMasterCard: new RegExp('^5[1-5]')
+export const regExp = {
+  visa: new RegExp('^4'),
+  troy: new RegExp('^9792'),
+  amex: new RegExp('^(34|37)'),
+  discover: new RegExp('^6011'),
+  masterCard: new RegExp('^5[1-5]')
 };
