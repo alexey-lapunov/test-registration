@@ -67,8 +67,7 @@ export const Card = ({
           </div>
           <div className={styles.cardNumber}>
             {Array.from(Array(16)).map((item, i) => {
-              const transformCardNumber = cardNumber.replace(/\s/g, '');
-              const translateY = (+transformCardNumber[i] + 1) * 100 || 0;
+              const translateY = (+cardNumber[i] + 1) * 100 || 0;
               return (
                 <div
                   key={i}
@@ -148,8 +147,8 @@ export const Card = ({
             <div className={styles.cardCvvType}>
               <img
                 alt=""
-                className={styles.cardCvvTypeIcon}
                 src={cardTypeIcons[cardType]}
+                className={styles.cardCvvTypeIcon}
               />
             </div>
           </div>

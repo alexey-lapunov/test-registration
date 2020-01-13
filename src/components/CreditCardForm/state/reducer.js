@@ -9,7 +9,8 @@ export const initialState = {
     month: 'MM',
     year: 'YY'
   },
-  cardRotate: false
+  cardRotate: false,
+  isValidForm: false
 };
 
 export function reducer(state, action) {
@@ -54,6 +55,11 @@ export function reducer(state, action) {
       return {
         ...state,
         cardRotate: action.payload
+      };
+    case A.SET_FORM_VALID:
+      return {
+        ...state,
+        isValidForm: action.payload
       };
     default:
       return state;

@@ -9,6 +9,7 @@ import { regExp } from 'utils/regExp';
 import { Card } from './Card';
 import { Input } from 'components/Input';
 import { Select } from 'components/Select';
+import { Button } from 'components/Button';
 
 import styles from './CreditCardForm.module.scss';
 
@@ -58,7 +59,7 @@ const CreditCardForm = () => {
     const target = e.target;
 
     setCardType(target.value);
-    dispatch(actions.setCardNumber(target.value));
+    dispatch(actions.setCardNumber(target.value.replace(/\s/g, '')));
   };
 
   const inputCardHolderOnChange = e => {
@@ -83,6 +84,24 @@ const CreditCardForm = () => {
     const target = e.target;
 
     dispatch(actions.setCardCvv(target.value));
+  };
+
+  const isValidForm = () => {
+    const { cardNumber, cardHolder, cardCvv, expirationDate } = state;
+
+    const isValidCardNumber = cardNumber.length === 16;
+    const isValidCardHolder = cardHolder.length > 3;
+    const isValidCardCvv = cardCvv.length >= 3;
+    const isValidExpirationDate = !!(
+      Number(expirationDate.month) && Number(expirationDate.year)
+    );
+    const resultValid =
+      isValidCardNumber &&
+      isValidCardHolder &&
+      isValidCardCvv &&
+      isValidExpirationDate;
+
+    return resultValid;
   };
 
   return (
@@ -143,6 +162,9 @@ const CreditCardForm = () => {
             onBlur={() => dispatch(actions.setCardRotate(false))}
           />
         </div>
+      </div>
+      <div className={styles.button}>
+        <Button text="Submit" disabled={!state.isValidForm} />
       </div>
     </div>
   );

@@ -34,3 +34,8 @@ export const setCardType = value => ({
   type: ACTIONS_TYPES.SET_CARD_TYPE,
   payload: value
 });
+
+export const setFormValid = value => ({
+  type: ACTIONS_TYPES.SET_FORM_VALID,
+  payload: value
+});
