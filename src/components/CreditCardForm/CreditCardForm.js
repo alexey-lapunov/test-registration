@@ -57,70 +57,82 @@ const CreditCardForm = () => {
 
   const inputCardNumberOnChange = e => {
     const target = e.target;
+    const value = target.value.replace(/\s/g, '');
+    const isValid = value.length === 16;
+    const result = { value, isValid };
 
     setCardType(target.value);
-    dispatch(actions.setCardNumber(target.value.replace(/\s/g, '')));
+    dispatch(actions.setCardNumber(result));
   };
 
   const inputCardHolderOnChange = e => {
     const target = e.target;
+    const value = target.value;
+    const isValid = value.length > 3;
+    const result = { value, isValid };
 
-    dispatch(actions.setCardHolder(target.value));
+    dispatch(actions.setCardHolder(result));
   };
 
   const selectMonthOnChange = e => {
     const target = e.target;
+    const value = target.value;
+    const isValid = !!(
+      Number(value) && Number(state.expirationDate.value.year)
+    );
+    const result = { value, isValid };
 
-    dispatch(actions.setCardDateMonth(target.value));
+    dispatch(actions.setCardDateMonth(result));
   };
 
   const selectYearOnChange = e => {
     const target = e.target;
+    const value = target.value;
+    const isValid = !!(
+      Number(value) && Number(state.expirationDate.value.month)
+    );
+    const result = { value, isValid };
 
-    dispatch(actions.setCardDateYear(target.value));
+    dispatch(actions.setCardDateYear(result));
   };
 
   const inputCardCvv = e => {
     const target = e.target;
+    const value = target.value;
+    const isValid = value.length >= 3;
+    const result = { value, isValid };
 
-    dispatch(actions.setCardCvv(target.value));
+    dispatch(actions.setCardCvv(result));
   };
 
   const isValidForm = () => {
     const { cardNumber, cardHolder, cardCvv, expirationDate } = state;
 
-    const isValidCardNumber = cardNumber.length === 16;
-    const isValidCardHolder = cardHolder.length > 3;
-    const isValidCardCvv = cardCvv.length >= 3;
-    const isValidExpirationDate = !!(
-      Number(expirationDate.month) && Number(expirationDate.year)
+    return (
+      cardNumber.isValid &&
+      cardHolder.isValid &&
+      cardCvv.isValid &&
+      expirationDate.isValid
     );
-    const resultValid =
-      isValidCardNumber &&
-      isValidCardHolder &&
-      isValidCardCvv &&
-      isValidExpirationDate;
-
-    return resultValid;
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.card}>
         <Card
-          cardCvv={state.cardCvv}
           cardType={state.cardType}
-          cardNumber={state.cardNumber}
+          cardCvv={state.cardCvv.value}
           cardRotate={state.cardRotate}
-          cardHolder={state.cardHolder}
-          expirationDate={state.expirationDate}
+          cardNumber={state.cardNumber.value}
+          cardHolder={state.cardHolder.value}
+          expirationDate={state.expirationDate.value}
         />
       </div>
       <div className={styles.row}>
         <div className={styles.cell}>
           <Input
             labelText="Card Number"
-            value={state.cardNumber}
+            value={state.cardNumber.value}
             mask="9999 9999 9999 9999"
             onChange={inputCardNumberOnChange}
           />
@@ -130,7 +142,7 @@ const CreditCardForm = () => {
         <div className={styles.cell}>
           <Input
             labelText="Card Holder"
-            value={state.cardHolder}
+            value={state.cardHolder.value}
             onChange={inputCardHolderOnChange}
           />
         </div>
@@ -164,7 +176,7 @@ const CreditCardForm = () => {
         </div>
       </div>
       <div className={styles.button}>
-        <Button text="Submit" disabled={!state.isValidForm} />
+        <Button text="Submit" disabled={!isValidForm()} />
       </div>
     </div>
   );

@@ -1,49 +1,67 @@
 import * as A from './constants';
 
 export const initialState = {
-  cardNumber: '',
-  cardHolder: '',
-  cardCvv: '',
   cardType: 'visa',
-  expirationDate: {
-    month: 'MM',
-    year: 'YY'
-  },
   cardRotate: false,
-  isValidForm: false
+  cardCvv: { value: '', isValid: false },
+  cardHolder: { value: '', isValid: false },
+  cardNumber: { value: '', isValid: false },
+  expirationDate: {
+    value: { month: 'MM', year: 'YY' },
+    isValid: false
+  }
 };
 
 export function reducer(state, action) {
   switch (action.type) {
-    case A.SET_CARD_NUMBER:
+    case A.SET_CARD_NUMBER: {
+      const {
+        payload: { value, isValid }
+      } = action;
       return {
         ...state,
-        cardNumber: action.payload
+        cardNumber: { value, isValid }
       };
-    case A.SET_CARD_HOLDER:
+    }
+    case A.SET_CARD_HOLDER: {
+      const {
+        payload: { value, isValid }
+      } = action;
       return {
         ...state,
-        cardHolder: action.payload
+        cardHolder: { value, isValid }
       };
+    }
     case A.SET_CARD_CVV:
+      const {
+        payload: { value, isValid }
+      } = action;
+
       return {
         ...state,
-        cardCvv: action.payload
+        cardCvv: { value, isValid }
       };
     case A.SET_EXPIRATION_DATE_MONTH:
       return {
         ...state,
         expirationDate: {
           ...state.expirationDate,
-          month: action.payload
+          value: {
+            ...state.expirationDate.value,
+            month: action.payload.value
+          },
+          isValid: action.payload.isValid
         }
       };
     case A.SET_EXPIRATION_DATE_YEAR:
       return {
         ...state,
         expirationDate: {
-          ...state.expirationDate,
-          year: action.payload
+          value: {
+            ...state.expirationDate.value,
+            year: action.payload.value
+          },
+          isValid: action.payload.isValid
         }
       };
     case A.SET_CARD_TYPE:
@@ -55,11 +73,6 @@ export function reducer(state, action) {
       return {
         ...state,
         cardRotate: action.payload
-      };
-    case A.SET_FORM_VALID:
-      return {
-        ...state,
-        isValidForm: action.payload
       };
     default:
       return state;
